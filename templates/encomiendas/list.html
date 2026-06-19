@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block title %}Listado de Encomiendas - Sistema de Encomiendas{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="h3"><i class="fas fa-boxes me-2"></i>Listado de Encomiendas</h2>
+    <a href="{% url 'encomienda_create' %}" class="btn btn-primary">
+        <i class="fas fa-plus me-1"></i>Nueva Encomienda
+    </a>
+</div>
+
+<div class="card shadow">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Encomiendas Registradas</h5>
+        <form method="GET" class="input-group" style="width: 300px;">
+            <input type="text" name="q" class="form-control" placeholder="Buscar por código..." value="{{ request.GET.q }}">
+            <button class="btn btn-outline-secondary" type="submit">
+                <i class="fas fa-search"></i>
+            </button>
+        </form>
+    </div>
+     
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Descripción</th>
+                        <th>Remitente</th>
+                        <th>Destinatario</th>
+                        <th>Ruta</th>
+                        <th>Estado</th>
+                        <th>Costo</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for encomienda in encomiendas %}
+                    <tr>
+                        <td>{{ encomienda.codigo }}</td>
+                        <td>{{ encomienda.descripcion_corta }}</td>
+                        <td>{{ encomienda.remitente }}</td>
+                        <td>{{ encomienda.destinatario }}</td>
+                        <td>{{ encomienda.ruta }}</td>
+                        <td>
+                            <span class="badge {% if encomienda.estado == 'EN' %}bg-success{% elif encomienda.estado == 'TR' %}bg-primary{% else %}bg-warning{% endif %}">
+                                {{ encomienda.get_estado_display }}
+                            </span>
+                        </td>
+                        <td>S/ {{ encomienda.costo_envio }}</td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <a href="{% url 'encomienda_detail' encomienda.pk %}" class="btn btn-primary" data-bs-toggle="tooltip" title="Ver detalle">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{% url 'encomienda_edit' encomienda.pk %}" class="btn btn-warning" data-bs-toggle="tooltip" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" class="text-center py-3">No hay encomiendas para mostrar</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+     
+    {% if encomiendas.has_other_pages %}
+    <div class="card-footer bg-white">
+        <nav aria-label="Paginación">
+            <ul class="pagination justify-content-center mb-0">
+                {% if encomiendas.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ encomiendas.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link"><i class="fas fa-chevron-left"></i></span>
+                </li>
+                {% endif %}
+                 
+                {% for i in encomiendas.paginator.page_range %}
+                    {% if encomiendas.number == i %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ i }}</span>
+                    </li>
+                    {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ i }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ i }}</a>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                 
+                {% if encomiendas.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ encomiendas.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link"><i class="fas fa-chevron-right"></i></span>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

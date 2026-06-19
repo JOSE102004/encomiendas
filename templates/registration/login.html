@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Iniciar Sesión - Sistema de Encomiendas{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 col-lg-4">
+        <div class="text-center mb-4">
+            <i class="fas fa-truck-loading fa-4x text-primary mb-3"></i>
+            <h2 class="mt-2">Sistema de Encomiendas</h2>
+            <p class="text-muted">Ingrese sus credenciales para acceder</p>
+        </div>
+         
+        <div class="card shadow border-0">
+            <div class="card-body p-4">
+                {% if form.errors %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Usuario o contraseña incorrectos.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endif %}
+                 
+                <form method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+                     
+                    <div class="mb-3">
+                        <label for="id_username" class="form-label">Nombre de usuario</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0">
+                                <i class="fas fa-user text-muted"></i>
+                            </span>
+                            <input type="text" name="username" id="id_username" class="form-control border-start-0 ps-0" placeholder="Ingrese su usuario" required autofocus>
+                        </div>
+                    </div>
+                     
+                    <div class="mb-4">
+                        <label for="id_password" class="form-label">Contraseña</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0">
+                                <i class="fas fa-lock text-muted"></i>
+                            </span>
+                            <input type="password" name="password" id="id_password" class="form-control border-start-0 ps-0" placeholder="Ingrese su contraseña" required>
+                        </div>
+                    </div>
+                     
+                    <div class="form-check mb-4">
+                        <input class="form-check-input" type="checkbox" id="remember-me">
+                        <label class="form-check-label text-muted" for="remember-me">
+                            Recordarme
+                        </label>
+                    </div>
+                     
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg shadow-sm">
+                            <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+                        </button>
+                    </div>
+                     
+                    <input type="hidden" name="next" value="{{ next }}">
+                </form>
+                 
+                <div class="text-center mt-4">
+                    <a href="#" class="text-decoration-none small text-primary">¿Olvidó su contraseña?</a>
+                </div>
+            </div>
+        </div>
+         
+        <div class="text-center mt-4 text-muted">
+            <small>&copy; {% now "Y" %} Sistema de Encomiendas. Todos los derechos reservados.</small>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .card {
+        border-radius: 1rem;
+    }
+    .input-group-text {
+        border-right: none;
+    }
+    .form-control:focus {
+        box-shadow: none;
+        border-color: #ced4da;
+    }
+    .btn-primary {
+        border-radius: 0.5rem;
+        padding: 0.8rem;
+    }
+</style>
+{% endblock %}

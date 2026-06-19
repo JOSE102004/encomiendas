@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+
+{% block title %}Inicio - Sistema de Encomiendas{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-body">
+                <h2 class="card-title text-primary">
+                    <i class="fas fa-truck-loading me-2"></i>Bienvenido al Sistema de Encomiendas
+                </h2>
+                <p class="lead">Sistema integrado para gestión de envíos y logística.</p>
+                <hr>
+                <p>Este sistema le permite administrar sus encomiendas, rutas, clientes y reportes de manera eficiente.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tarjetas de estadísticas -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white shadow-sm mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title">Encomiendas</h6>
+                        <h2 class="mb-0">{{ total_encomiendas|default:"0" }}</h2>
+                    </div>
+                    <i class="fas fa-box fa-2x"></i>
+                </div>
+            </div>
+            <a href="{% url 'encomienda_list' %}" class="card-footer bg-primary-dark d-flex justify-content-between align-items-center py-1 text-white text-decoration-none">
+                <small>Ver detalles</small>
+                <i class="fas fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+     
+    <div class="col-md-3">
+        <div class="card bg-success text-white shadow-sm mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title">Envíos Hoy</h6>
+                        <h2 class="mb-0">{{ envios_hoy|default:"0" }}</h2>
+                    </div>
+                    <i class="fas fa-shipping-fast fa-2x"></i>
+                </div>
+            </div>
+            <a href="{% url 'encomienda_list' %}" class="card-footer bg-success-dark d-flex justify-content-between align-items-center py-1 text-white text-decoration-none">
+                <small>Ver detalles</small>
+                <i class="fas fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+     
+    <div class="col-md-3">
+        <div class="card bg-warning text-white shadow-sm mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title">Clientes</h6>
+                        <h2 class="mb-0">{{ total_clientes|default:"0" }}</h2>
+                    </div>
+                    <i class="fas fa-users fa-2x"></i>
+                </div>
+            </div>
+            <div class="card-footer bg-warning-dark d-flex justify-content-between align-items-center py-1">
+                <small>Ver detalles</small>
+                <i class="fas fa-arrow-circle-right"></i>
+            </div>
+        </div>
+    </div>
+     
+    <div class="col-md-3">
+        <div class="card bg-danger text-white shadow-sm mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title">Entregas Pendientes</h6>
+                        <h2 class="mb-0">{{ pendientes|default:"0" }}</h2>
+                    </div>
+                    <i class="fas fa-clock fa-2x"></i>
+                </div>
+            </div>
+            <div class="card-footer bg-danger-dark d-flex justify-content-between align-items-center py-1">
+                <small>Ver detalles</small>
+                <i class="fas fa-arrow-circle-right"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Widgets de accesos rápidos -->
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-tasks me-2"></i>Acciones Rápidas
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <a href="{% url 'encomienda_create' %}" class="btn btn-primary w-100 p-3 mb-3 text-center">
+                            <i class="fas fa-shipping-fast fa-2x mb-2"></i><br>
+                            Nuevo Envío
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="#" class="btn btn-success w-100 p-3 mb-3 text-center">
+                            <i class="fas fa-user-plus fa-2x mb-2"></i><br>
+                            Nuevo Cliente
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="#" class="btn btn-info w-100 p-3 mb-3 text-center">
+                            <i class="fas fa-route fa-2x mb-2"></i><br>
+                            Nueva Ruta
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="#" class="btn btn-warning w-100 p-3 mb-3 text-center">
+                            <i class="fas fa-chart-bar fa-2x mb-2"></i><br>
+                            Reportes
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+     
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-bell me-2"></i>Notificaciones
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex align-items-center">
+                        <div class="bg-warning rounded-circle p-2 me-3">
+                            <i class="fas fa-exclamation-triangle text-white"></i>
+                        </div>
+                        <div>
+                            <p class="mb-0">3 encomiendas demoradas</p>
+                            <small class="text-muted">Hace 2 horas</small>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex align-items-center">
+                        <div class="bg-success rounded-circle p-2 me-3">
+                            <i class="fas fa-check text-white"></i>
+                        </div>
+                        <div>
+                            <p class="mb-0">Ruta Lima-Ica completada</p> 
+                            <small class="text-muted">Hace 4 horas</small>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-footer bg-white">
+                <a href="#" class="btn btn-sm btn-outline-primary">Ver todas</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

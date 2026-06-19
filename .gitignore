@@ -1,0 +1,18 @@
+# .gitignore
+
+# Variables de entorno (NO subir a GitHub)
+.env
+
+# Entornos virtuales
+venv/
+env/
+
+# Archivos de Python
+__pycache__/
+*.pyc
+
+# Base de datos local (SQLite)
+db.sqlite3
+
+# Archivos del sistema (Mac)
+.DS_Store

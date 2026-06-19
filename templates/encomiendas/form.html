@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {% if encomienda %}Editar{% else %}Nueva{% endif %} Encomienda - Sistema de Encomiendas
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="h3">
+        <i class="fas fa-{% if encomienda %}edit{% else %}plus{% endif %} me-2"></i>
+        {% if encomienda %}Editar{% else %}Nueva{% endif %} Encomienda
+    </h2>
+    <a href="{% url 'encomienda_list' %}" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left me-1"></i>Volver
+    </a>
+</div>
+
+<div class="card shadow">
+    <div class="card-header bg-white">
+        <h5 class="mb-0">Formulario de Registro</h5>
+    </div>
+    <div class="card-body">
+        <form method="post" id="encomiendaForm" class="needs-validation" novalidate>
+            {% csrf_token %}
+             
+            {% if form.non_field_errors %}
+            <div class="alert alert-danger" role="alert">
+                <ul class="mb-0">
+                    {% for error in form.non_field_errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+             
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="{{ form.codigo.id_for_label }}" class="form-label">Código*</label>
+                    {{ form.codigo }}
+                    {% if form.codigo.errors %}
+                    <div class="text-danger small">{{ form.codigo.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-4">
+                    <label for="{{ form.estado.id_for_label }}" class="form-label">Estado*</label>
+                    {{ form.estado }}
+                </div>
+                <div class="col-md-4">
+                    <label for="{{ form.fecha_entrega_est.id_for_label }}" class="form-label">Fecha Est. Entrega</label>
+                    {{ form.fecha_entrega_est }}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="{{ form.descripcion.id_for_label }}" class="form-label">Descripción*</label>
+                {{ form.descripcion }}
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="{{ form.remitente.id_for_label }}" class="form-label">Remitente*</label>
+                    {{ form.remitente }}
+                </div>
+                <div class="col-md-6">
+                    <label for="{{ form.destinatario.id_for_label }}" class="form-label">Destinatario*</label>
+                    {{ form.destinatario }}
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="{{ form.ruta.id_for_label }}" class="form-label">Ruta*</label>
+                    {{ form.ruta }}
+                </div>
+                <div class="col-md-6">
+                    <label for="{{ form.empleado_registro.id_for_label }}" class="form-label">Empleado responsable*</label>
+                    {{ form.empleado_registro }}
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="{{ form.peso_kg.id_for_label }}" class="form-label">Peso (kg)*</label>
+                    {{ form.peso_kg }}
+                </div>
+                <div class="col-md-4">
+                    <label for="{{ form.volumen_cm3.id_for_label }}" class="form-label">Volumen (cm³)</label>
+                    {{ form.volumen_cm3 }}
+                </div>
+                <div class="col-md-4">
+                    <label for="{{ form.costo_envio.id_for_label }}" class="form-label">Costo S/*</label>
+                    {{ form.costo_envio }}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="{{ form.observaciones.id_for_label }}" class="form-label">Observaciones</label>
+                {{ form.observaciones }}
+            </div>
+             
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                <button type="button" class="btn btn-outline-secondary me-md-2" onclick="history.back()">Cancelar</button>
+                <button type="submit" class="btn btn-primary">
+                    {% if encomienda %}Guardar Cambios{% else %}Registrar Encomienda{% endif %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Validación del formulario
+        validarFormulario('encomiendaForm');
+        
+        // Aplicar clases de Bootstrap a los campos del formulario generados por Django
+        const inputs = document.querySelectorAll('input, select, textarea');
+        inputs.forEach(input => {
+            if (!input.classList.contains('form-check-input')) {
+                input.classList.add('form-control');
+                if (input.tagName === 'SELECT') {
+                    input.classList.remove('form-control');
+                    input.classList.add('form-select');
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

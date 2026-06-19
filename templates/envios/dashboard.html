@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2>Dashboard</h2>
+  <span id="ws-badge" class="badge bg-secondary">Conectando...</span>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-3">
+    <div class="card shadow-sm">
+      <div class="card-body text-center">
+        <div class="fs-2 fw-bold text-primary" id="stat-activas">{{ stats.activas }}</div>
+        <div class="text-muted">Activas</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card shadow-sm">
+      <div class="card-body text-center">
+        <div class="fs-2 fw-bold text-warning" id="stat-en-transito">{{ stats.en_transito }}</div>
+        <div class="text-muted">En Tránsito</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card shadow-sm">
+      <div class="card-body text-center">
+        <div class="fs-2 fw-bold text-danger" id="stat-retraso">{{ stats.con_retraso }}</div>
+        <div class="text-muted">Con Retraso</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card shadow-sm">
+      <div class="card-body text-center">
+        <div class="fs-2 fw-bold text-success" id="stat-entregadas">{{ stats.entregadas_hoy }}</div>
+        <div class="text-muted">Entregadas Hoy</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card shadow-sm">
+  <div class="card-header">Feed de actividad</div>
+  <ul class="list-group list-group-flush" id="feed-lista">
+    <li class="list-group-item text-muted">Esperando eventos...</li>
+  </ul>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const WS_URL = 'ws://' + window.location.host + '/ws/dashboard/';
+let ws;
+
+function actualizarContador(id, valor) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = valor;
+}
+
+function agregarAlFeed(data) {
+    const lista = document.getElementById('feed-lista');
+    const items = lista.querySelectorAll('li');
+    if (items.length === 1 && items[0].classList.contains('text-muted')) {
+        lista.innerHTML = '';
+    }
+    
+    const li = document.createElement('li');
+    li.className = 'list-group-item';
+    li.innerHTML = `<strong>${data.codigo}</strong> cambió a ${data.estado_nuevo} 
+                    <br><small class="text-muted">${data.empleado} - ${new Date(data.timestamp).toLocaleTimeString()}</small>`;
+    lista.prepend(li);
+    
+    if (lista.children.length > 10) {
+        lista.lastElementChild.remove();
+    }
+}
+
+function mostrarToast(data) {
+    // Optionally implement a toast notification
+    console.log("Toast: ", data);
+}
+
+function conectarWebSocket() {
+    ws = new WebSocket(WS_URL);
+
+    ws.onopen = function() {
+        document.getElementById('ws-badge').textContent = 'EN VIVO';
+        document.getElementById('ws-badge').className = 'badge bg-success';
+    };
+
+    ws.onmessage = function(event) {
+        const data = JSON.parse(event.data);
+
+        if (data.tipo === 'stats_iniciales' || data.tipo === 'stats_actualizado') {
+            actualizarContador('stat-activas',     data.stats.activas);
+            actualizarContador('stat-en-transito', data.stats.en_transito);
+            actualizarContador('stat-retraso',     data.stats.con_retraso);
+            actualizarContador('stat-entregadas',  data.stats.entregadas_hoy);
+        }
+
+        if (data.tipo === 'estado_cambio') {
+            agregarAlFeed(data);
+            mostrarToast(data);
+        }
+    };
+
+    ws.onclose = function(event) {
+        document.getElementById('ws-badge').textContent = 'Desconectado';
+        document.getElementById('ws-badge').className = 'badge bg-danger';
+        if (event.code !== 1000) {
+            setTimeout(conectarWebSocket, 3000);
+        }
+    };
+}
+
+document.addEventListener('DOMContentLoaded', conectarWebSocket);
+</script>
+{% endblock %}

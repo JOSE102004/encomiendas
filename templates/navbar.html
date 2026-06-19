@@ -1,0 +1,71 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'home' %}">
+            <i class="fas fa-truck-loading me-2"></i>Sistema de Encomiendas
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'home' %}">
+                        <i class="fas fa-home me-1"></i>Inicio
+                    </a>
+                </li>
+                
+                <!-- Dropdown para Encomiendas -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="encomiendasDropdown" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-box me-1"></i>Encomiendas
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="encomiendasDropdown">
+                        <li><a class="dropdown-item" href="{% url 'encomienda_list' %}">Lista de Encomiendas</a></li>
+                        <li><a class="dropdown-item" href="{% url 'encomienda_create' %}">Nueva Encomienda</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{% url 'encomienda_list' %}">Rutas</a></li>
+                    </ul>
+                </li>
+                 
+                <!-- Dropdown para Clientes -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="clientesDropdown" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-users me-1"></i>Clientes
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="clientesDropdown">
+                        <li><a class="dropdown-item" href="#">Lista de Clientes</a></li>
+                        <li><a class="dropdown-item" href="#">Nuevo Cliente</a></li>
+                    </ul>
+                </li>
+            </ul>
+             
+            <!-- Usuario y Búsqueda -->
+            <div class="d-flex">
+                <form class="d-flex me-2">
+                    <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar">
+                    <button class="btn btn-outline-light" type="submit"><i class="fas fa-search"></i></button>
+                </form>
+                 
+                {% if user.is_authenticated %}
+                <div class="dropdown">
+                    <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown" 
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user me-1"></i>{{ user.username|truncatechars:15 }}
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-user-circle me-2"></i>Perfil</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Configuración</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><form method="post" action="{% url 'logout' %}">{% csrf_token %}<button type="submit" class="dropdown-item"><i class="fas fa-sign-out-alt me-2"></i>Cerrar sesión</button></form></li>
+                    </ul>
+                </div>
+                {% else %}
+                <a href="{% url 'login' %}" class="btn btn-outline-light"><i class="fas fa-sign-in-alt me-1"></i>Iniciar sesión</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>
