@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %}Ruta {{ ruta.codigo }} - Sistema de Encomiendas{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="h3">
+        <i class="fas fa-route me-2"></i>Detalle de Ruta
+    </h2>
+    <div>
+        <a href="{% url 'ruta_list' %}" class="btn btn-outline-secondary me-2">
+            <i class="fas fa-arrow-left me-1"></i>Volver
+        </a>
+        <a href="{% url 'ruta_edit' ruta.pk %}" class="btn btn-warning">
+            <i class="fas fa-edit me-1"></i>Editar
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Información de la Ruta</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tr>
+                        <td class="text-muted">Código:</td>
+                        <td><strong>{{ ruta.codigo }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Origen:</td>
+                        <td><strong>{{ ruta.origen }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Destino:</td>
+                        <td><strong>{{ ruta.destino }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Descripción:</td>
+                        <td><strong>{{ ruta.descripcion|default:"-" }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Precio base:</td>
+                        <td><strong class="text-success">S/ {{ ruta.precio_base }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Días estimados:</td>
+                        <td><strong>{{ ruta.dias_entrega }} días</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Estado:</td>
+                        <td>
+                            <span class="badge {% if ruta.estado == 1 %}bg-success{% else %}bg-secondary{% endif %}">
+                                {{ ruta.get_estado_display }}
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Encomiendas en esta ruta</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-6">
+                        <div class="border rounded p-3 text-center">
+                            <div class="fs-3 fw-bold text-primary">{{ ruta.encomiendas.count }}</div>
+                            <div class="text-muted small">Total encomiendas</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="border rounded p-3 text-center">
+                            <div class="fs-3 fw-bold text-warning">{{ ruta.encomiendas.activas.count }}</div>
+                            <div class="text-muted small">Activas</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Acciones</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{% url 'encomienda_create' %}?ruta={{ ruta.pk }}" class="btn btn-primary">
+                        <i class="fas fa-box me-2"></i>Nueva encomienda en esta ruta
+                    </a>
+                    <a href="{% url 'ruta_delete' ruta.pk %}" class="btn btn-danger">
+                        <i class="fas fa-route me-2"></i>Desactivar ruta
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

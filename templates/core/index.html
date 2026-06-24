@@ -67,10 +67,10 @@
                     <i class="fas fa-users fa-2x"></i>
                 </div>
             </div>
-            <div class="card-footer bg-warning-dark d-flex justify-content-between align-items-center py-1">
+            <a href="{% url 'cliente_list' %}" class="card-footer bg-warning-dark d-flex justify-content-between align-items-center py-1 text-white text-decoration-none">
                 <small>Ver detalles</small>
                 <i class="fas fa-arrow-circle-right"></i>
-            </div>
+            </a>
         </div>
     </div>
      
@@ -85,10 +85,10 @@
                     <i class="fas fa-clock fa-2x"></i>
                 </div>
             </div>
-            <div class="card-footer bg-danger-dark d-flex justify-content-between align-items-center py-1">
+            <a href="{% url 'dashboard' %}" class="card-footer bg-danger-dark d-flex justify-content-between align-items-center py-1 text-white text-decoration-none">
                 <small>Ver detalles</small>
                 <i class="fas fa-arrow-circle-right"></i>
-            </div>
+            </a>
         </div>
     </div>
 </div>
@@ -111,21 +111,21 @@
                         </a>
                     </div>
                     <div class="col-md-3">
-                        <a href="#" class="btn btn-success w-100 p-3 mb-3 text-center">
+                        <a href="{% url 'cliente_create' %}" class="btn btn-success w-100 p-3 mb-3 text-center">
                             <i class="fas fa-user-plus fa-2x mb-2"></i><br>
                             Nuevo Cliente
                         </a>
                     </div>
                     <div class="col-md-3">
-                        <a href="#" class="btn btn-info w-100 p-3 mb-3 text-center">
+                        <a href="{% url 'ruta_create' %}" class="btn btn-info w-100 p-3 mb-3 text-center">
                             <i class="fas fa-route fa-2x mb-2"></i><br>
                             Nueva Ruta
                         </a>
                     </div>
                     <div class="col-md-3">
-                        <a href="#" class="btn btn-warning w-100 p-3 mb-3 text-center">
+                        <a href="{% url 'dashboard' %}" class="btn btn-warning w-100 p-3 mb-3 text-center">
                             <i class="fas fa-chart-bar fa-2x mb-2"></i><br>
-                            Reportes
+                            Dashboard
                         </a>
                     </div>
                 </div>
